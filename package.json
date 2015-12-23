@@ -29,6 +29,7 @@
     "couch-pwd": "0.0.1",
     "moment": "^2.6.0",
     "ms": "^0.7.1",
+    "node.extend": "^1.1.5",
     "sequelize": "^3.3.2",
     "uuid": "^2.0.1"
   },

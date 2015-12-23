@@ -5,6 +5,7 @@ var pwd = require('couch-pwd');
 var ms = require('ms');
 var moment = require('moment');
 var Sequelize = require('sequelize');
+var extend = require('node.extend');
 
 /**
  * Adapter constructor function
@@ -29,7 +30,7 @@ var Adapter = module.exports = function(config) {
     storage: config.db.name
   });
 
-  this.User = sequelize.define('User', {
+  var userColumns = {
     // make id like CouchDB and MongoDB
     _id: {
       type: Sequelize.INTEGER,
@@ -57,7 +58,12 @@ var Adapter = module.exports = function(config) {
     previousLoginIp: Sequelize.STRING,
     currentLoginTime: Sequelize.DATE,
     currentLoginIp: Sequelize.STRING
-  }, {
+  };
+
+  var configUserColumns = config.userColumns;
+  userColumns = extend(true, userColumns, configUserColumns);
+
+  this.User = sequelize.define('User', configUserColumns, {
     tableName: config.db.collection,   // this will define the table's name
     timestamps: false                 // this will deactivate the timestamp columns
   });
