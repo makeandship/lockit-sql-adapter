@@ -59,7 +59,7 @@ var Adapter = module.exports = function(config) {
     currentLoginTime: Sequelize.DATE,
     currentLoginIp: Sequelize.STRING,
     // authentication token
-    authenticationToken: Sequelize.String
+    authenticationToken: Sequelize.STRING
   };
 
   var configUserColumns = config.userColumns;
