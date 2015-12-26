@@ -65,7 +65,7 @@ var Adapter = module.exports = function(config) {
   var configUserColumns = config.userColumns;
   userColumns = extend(true, userColumns, configUserColumns);
 
-  this.User = sequelize.define('User', configUserColumns, {
+  this.User = sequelize.define('User', userColumns, {
     tableName: config.db.collection,   // this will define the table's name
     timestamps: false                 // this will deactivate the timestamp columns
   });
