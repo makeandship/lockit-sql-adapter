@@ -114,9 +114,10 @@ var Adapter = module.exports = function(config) {
  * @param {String} name - User name
  * @param {String} email - User email
  * @param {String} pw - Plain text password
+ * @param {Object} extensions - Object of extension elements
  * @param {Function} done - Callback function having `err` and `user` as arguments
  */
-Adapter.prototype.save = function(name, email, pw, done) {
+Adapter.prototype.save = function(name, email, pw, extensions, done) {
   var that = this;
   var now = moment().toDate();
   var timespan = ms(that.config.signup.tokenExpiration);
@@ -124,7 +125,7 @@ Adapter.prototype.save = function(name, email, pw, done) {
   // create hashed password
   pwd.hash(pw, function(err, salt, hash) {
     if (err) {return done(err); }
-    var user = that.User.build({
+    var userAttributes = {
       name: name,
       email: email,
       signupToken: uuid.v4(),
@@ -133,7 +134,15 @@ Adapter.prototype.save = function(name, email, pw, done) {
       failedLoginAttempts: 0,
       salt: salt,
       derived_key: hash
-    });
+    };
+    
+    // add extension elements
+    for (var column in extensions) {
+      userAttributes[column] = extensions[column];
+    }
+    
+    var user = that.User.build(userAttributes);
+    
     // save user to db
     user.save()
       .then(function() {
